@@ -7,8 +7,11 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 script {
-                    // This will automatically check out the branch configured in the SCM section.
-                    echo "Checked out the code from SCM."
+                    // Checkout the branch based on the selected environment
+                    echo "Checking out the branch for the ${params.ENVIRONMENT} environment."
+                    checkout scm
+                    // Ensure the branch is switched according to the ENVIRONMENT parameter
+                    sh "git checkout ${params.ENVIRONMENT}"
                 }
             }
         }
@@ -17,6 +20,7 @@ pipeline {
                 script {
                     // Replace `your-dockerhub-user` with your actual Docker Hub username
                     def imageTag = "malikdrote/image:${params.ENVIRONMENT}"
+                    echo "Building Docker image for ${params.ENVIRONMENT} environment."
                     sh "docker build -t ${imageTag} ."
                 }
             }
@@ -25,6 +29,7 @@ pipeline {
             steps {
                 script {
                     def imageTag = "malikdrote/image:${params.ENVIRONMENT}"
+                    echo "Pushing Docker image for ${params.ENVIRONMENT} environment."
                     sh "docker push ${imageTag}"
                 }
             }
@@ -33,6 +38,7 @@ pipeline {
             steps {
                 script {
                     def imageTag = "malikdrote/image:${params.ENVIRONMENT}"
+                    echo "Deploying Docker container for ${params.ENVIRONMENT} environment."
                     // Pull and run the Docker container for the specified environment
                     sh """
                     docker pull ${imageTag}
