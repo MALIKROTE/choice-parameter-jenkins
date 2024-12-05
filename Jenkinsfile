@@ -36,7 +36,7 @@ pipeline {
                     // Pull and run the Docker container for the specified environment
                     sh """
                     docker pull ${imageTag}
-                    docker run -d --name app-${params.ENVIRONMENT} -p 8080:80 ${imageTag}
+                    docker run -d --name app-${params.ENVIRONMENT} -p 8085:80 ${imageTag}
                     """
                     echo "Deployed to ${params.ENVIRONMENT} environment."
                 }
