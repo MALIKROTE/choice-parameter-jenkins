@@ -32,7 +32,7 @@ pipeline {
         stage('Deploy Application') {
             steps {
                 script {
-                    def imageTag = "your-dockerhub-user/image:${params.ENVIRONMENT}"
+                    def imageTag = "malikdrote/image:${params.ENVIRONMENT}"
                     // Pull and run the Docker container for the specified environment
                     sh """
                     docker pull ${imageTag}
